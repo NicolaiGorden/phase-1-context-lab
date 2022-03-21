@@ -21,3 +21,59 @@ const allWagesFor = function () {
     return payable
 }
 
+const createEmployeeRecord = function (arr) {
+    return {
+        firstName: arr[0],
+        familyName: arr[1],
+        title: arr[2],
+        payPerHour: arr[3],
+        timeInEvents: [],
+        timeOutEvents: []
+    }
+}
+
+const createEmployeeRecords = function (arr){
+    let out = []
+    arr.map(e => out.push(createEmployeeRecord(e)))
+    return out
+}
+
+const createTimeInEvent = function (date){
+    let timeArr = date.split(' ')
+    this.timeInEvents.push({
+        type: 'TimeIn',
+        hour: parseInt(timeArr[1]),
+        date: timeArr[0],
+    })
+    return this
+}
+
+const createTimeOutEvent = function (date){
+    let timeArr = date.split(' ')
+    this.timeOutEvents.push({
+        type: 'TimeOut',
+        hour: parseInt(timeArr[1]),
+        date: timeArr[0],
+    })
+    return this
+}
+
+const hoursWorkedOnDate = function (date){
+    const timeIn = this.timeInEvents.find(o => o.date === date).hour
+    const timeOut = this.timeOutEvents.find(o => o.date === date).hour
+    return (timeOut - timeIn)/100
+}
+
+const wagesEarnedOnDate = function(date){
+    return hoursWorkedOnDate.call(this, date)*this.payPerHour
+}
+
+const findEmployeeByFirstName = function(srcArray, fN){
+    return srcArray.find(o=> o.firstName === fN)
+}
+
+const calculatePayroll = function(array){
+    let allWagesEarned = []
+    array.map(e => allWagesEarned.push(allWagesFor(e)))
+    return allWagesEarned.reduce((a,c)=>a+c)
+}
